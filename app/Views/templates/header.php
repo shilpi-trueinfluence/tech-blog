@@ -79,21 +79,22 @@
                                     </li>
                                 <?php } ?>
                                 <li><a href="<?php echo base_url('contact_us'); ?>">Contact Us</a></li>
-                                
+
                                 <!-- Login/Logout Option -->
-                                <?php 
+                                <?php
                                 $this->session = \Config\Services::session();
                                 $this->session->start();
-                                if (!isset($_SESSION['logged_in'])) { ?>
+                                if (!isset($_SESSION['logged_in'])) {
+                                    ?>
                                     <li class="user-profile <?php echo (isset($menu) && $menu['current_page'] == 'login') ? 'active' : ''; ?>">
                                         <a href="<?php echo base_url('login'); ?>" data-delay="0" data-close-others="false"><i class="fa fa-sign-in"></i> &nbsp;Sign In</a>
                                     </li>
                                 <?php } ?>
-                                    <?php ?>
-                                <?php 
-                                if (isset($_SESSION['logged_in'])) { 
-                                    $sub_name = substr($this->session->get('uname'),0,10);
-                                    $name = ($sub_name == $this->session->get('uname')) ? $sub_name : $sub_name.'...';
+                                <?php ?>
+                                <?php
+                                if (isset($_SESSION['logged_in'])) {
+                                    $sub_name = substr($this->session->get('uname'), 0, 10);
+                                    $name = ($sub_name == $this->session->get('uname')) ? $sub_name : $sub_name . '...';
                                     ?>
                                     <li class="dropdown user-profile">
                                         <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">
@@ -104,7 +105,7 @@
                                             <li><a href="<?php echo base_url('users/logout'); ?>"><i class="fa fa-sign-out"></i> Logout</a></li>
                                         </ul>
                                     </li>
-                                <?php } ?>
+<?php } ?>
                             </ul>
                         </div>
                     </div>

@@ -40,15 +40,6 @@
                     <span class="text">Leads</span>
                 </div>
             </div>
-<!--            <div class="col-xs-6 col-sm-3 col-md-3">
-                <div class="align-center color-white txt-shadow">
-                    <div class="icon">
-                        <i class="fa fa-trophy fa-5x"></i>
-                    </div>
-                    <strong id="counter-heart" class="number">378</strong><br />
-                    <span class="text">Awwards</span>
-                </div>
-            </div>-->
         </div>
     </div>
 </div>
