@@ -15,7 +15,14 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <form role="form" class="add-form" method="post" enctype="multipart/form-data">
+                <form role="form" class="add-form" action="<?php echo ($blog_data['id']) ? base_url('blogs/update') : base_url('blogs/create'); ?>" method="post" enctype="multipart/form-data">
+                    <?php
+                    if($blog_data['id']) {
+                    ?>
+                    <input type="hidden" name="id" value="<?php echo $blog_data['id']; ?>" />
+                    <?php 
+                    }
+                    ?>
                     <h2><i class="fa fa-page"></i> Add New Blog</h2>
                     <hr class="colorgraph">
                     <div class="row">
@@ -52,7 +59,36 @@
                             <div class="form-group">
                                 <label>Blog Image</label>
                                 <div class="col-xs-12" style="padding: 0">
-                                <input id="blog_image" type="file" name="blog_img">
+                                    <input id="blog_image" type="file" name="blog_img">
+                                    <?php
+                                    $file1 = new \CodeIgniter\Files\File('../public/'.$blog_data['image']);
+                                    ?>
+                                    <div class="jFiler-items jFiler-row">
+                                        <ul class="jFiler-items-list jFiler-items-default">
+                                            <li class="jFiler-item" data-jfiler-index="0" style="">
+                                                <div class="jFiler-item-container">
+                                                    <div class="jFiler-item-inner">
+                                                        <div class="jFiler-item-icon pull-left">
+                                                            <img src="<?php echo base_url($blog_data['image']); ?>" alt="your image" style="height: 50px;width: 50px; margin-bottom:0">
+                                                        </div>
+                                                        <div class="jFiler-item-info pull-left">
+                                                            <div class="jFiler-item-title" title="<?php echo $file1->getBasename(); ?>"><?php echo ($file1->getBasename() == substr($file1->getBasename(),0,40)) ? $file1->getBasename() : substr($file1->getBasename(),0,40).'...'; ?></div>
+                                                            <div class="jFiler-item-others">
+                                                                <span>size: <?php echo $file1->getSize('kb'); ?> KB</span>
+                                                                <span>type: <?php echo $file1->getMimeType(); ?></span>
+                                                                <span class="jFiler-item-status"></span>
+                                                            </div>
+                                                            <div class="jFiler-item-assets">
+                                                                <ul class="list-inline">
+                                                                    <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -60,6 +96,35 @@
                             <div class="form-group">
                                 <label>White Paper</label>
                                 <input type="file" name="document" id="document" class="form-control input-lg" />
+                                <?php
+                                $file2 = new \CodeIgniter\Files\File('../public/'.$blog_data['document']);
+                                ?>
+                                <div class="jFiler-items jFiler-row">
+                                    <ul class="jFiler-items-list jFiler-items-default">
+                                        <li class="jFiler-item" data-jfiler-index="0" style="">
+                                            <div class="jFiler-item-container">
+                                                <div class="jFiler-item-inner">
+                                                    <div class="jFiler-item-icon pull-left">
+                                                        <i class="icon-jfi-file-o jfi-file-type-application jfi-file-ext-pdf"></i>
+                                                    </div>
+                                                    <div class="jFiler-item-info pull-left">
+                                                        <div class="jFiler-item-title" title="<?php echo $file2->getBasename(); ?>"><?php echo ($file2->getBasename() == substr($file2->getBasename(),0,40)) ? $file2->getBasename() : substr($file2->getBasename(),0,40).'...'; ?></div>
+                                                        <div class="jFiler-item-others">
+                                                            <span>size: <?php echo $file2->getSize('kb'); ?> KB</span>
+                                                            <span>type: <?php echo $file2->getMimeType(); ?></span>
+                                                            <span class="jFiler-item-status"></span>
+                                                        </div>
+                                                        <div class="jFiler-item-assets">
+                                                            <ul class="list-inline">
+                                                                <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -68,7 +133,19 @@
                         <div class="col-xs-12">
                             <div class="form-group">
                                 <label>Blog Tags</label>
+                                <?php 
+                                if(isset($blog_data['tags'])) {
+                                    $tags = $blog_data['tags'];
+                                    $tags_arr = explode(',', $blog_data['tags']);
+                                }
+                                ?>
                                 <select class="form-control input-lg" id="tags" name="tags[]" multiple="true">
+                                    <?php if(isset($tags_arr) && !empty($tags_arr)) { 
+                                        foreach($tags_arr as $single_tab) { ?>
+                                        <option value="<?php echo $single_tab; ?>" selected="true"><?php echo $single_tab; ?></option>
+                                        <?php 
+                                        }
+                                    } ?>
                                 </select>
                             </div>
                         </div>

@@ -116,7 +116,7 @@ class Blogs extends BaseController {
         echo view('templates/footer');
     }
     
-    public function _upload_doc($id,$upload_files) {
+    private function _upload_doc($id,$upload_files) {
         $data = array();
         if (!file_exists('uploads/'.$id.'/')) {
             mkdir('uploads/'.$id.'/', 0777, true);
@@ -158,38 +158,70 @@ class Blogs extends BaseController {
         return json_encode(array('status' => $status));
     }
 
-    public function update() {
+    public function edit() {
         $this->categories = new CategoriesModel();
         $blog_id = $this->request->uri->getSegment(3);
         $details = $this->model->getBlogs(array(
             'id' => $blog_id,
         ));
-        if($_POST) {
-            $form_data = $this->request->getvar();
-            $user_id = $form_data['user-id'];
-            unset($form_data['user-id']);
-            $status = $this->model->update($user_id, $form_data);
-            return json_encode(array('status' => $status));
-        } else {
-            $data = array(
-                'blog_data' => $details,
-                'categories' => $this->categories->getCategories(),
-                'css' => array(
-                    base_url('plugins/jQueryFiler/css/themes/jquery.filer-dragdropbox-theme.css'),
-                    base_url('plugins/jQueryFiler/css/jquery.filer.css'),
-                ),
-                'js' => array(
-                    base_url('plugins/jQueryFiler/js/jquery.filer.min.js'),
-                    base_url('js/custom_js/blogs.js'),
-                ), 'menu' => array(
-                    'current_page'  => 'blogs',
-                    'current_menu'  => 'masters',
-                ),
-            );
-            echo view('templates/header', $data);
-            echo view('blogs/create', $data);
-            echo view('templates/footer');
-        }
+
+        $data = array(
+            'blog_data' => $details,
+            'categories' => $this->categories->getCategories(),
+            'css' => array(
+                base_url('plugins/jQueryFiler/css/themes/jquery.filer-dragdropbox-theme.css'),
+                base_url('plugins/jQueryFiler/css/jquery.filer.css'),
+            ),
+            'js' => array(
+                base_url('plugins/jQueryFiler/js/jquery.filer.min.js'),
+                base_url('js/custom_js/blogs.js'),
+            ), 'menu' => array(
+                'current_page'  => 'blogs',
+                'current_menu'  => 'masters',
+            ),
+        );
+        
+        echo view('templates/header', $data);
+        echo view('blogs/create', $data);
+        echo view('templates/footer');
+    }
+    
+    public function update() {
+        $this->categories = new CategoriesModel();
+        $form_data = $this->request->getvar();
+
+        $id = $form_data['id'];
+ 
+        $status = $this->model->update($id, [
+            'title'         => $this->request->getVar('title'),
+            'description'   => $this->request->getVar('description'),
+            'category_id'   => $this->request->getVar('category_id'),
+            'tags'          => implode(',',$this->request->getVar('tags')),
+        ]);
+        
+        $details = $this->model->getBlogs(array(
+            'id' => $id,
+        ));
+
+        $data = array(
+            'blog_data' => $details,
+            'categories' => $this->categories->getCategories(),
+            'css' => array(
+                base_url('plugins/jQueryFiler/css/themes/jquery.filer-dragdropbox-theme.css'),
+                base_url('plugins/jQueryFiler/css/jquery.filer.css'),
+            ),
+            'js' => array(
+                base_url('plugins/jQueryFiler/js/jquery.filer.min.js'),
+                base_url('js/custom_js/blogs.js'),
+            ), 'menu' => array(
+                'current_page'  => 'blogs',
+                'current_menu'  => 'masters',
+            ),
+        );
+        
+        echo view('templates/header', $data);
+        echo view('blogs/create', $data);
+        echo view('templates/footer');
     }
 
     public function view() {
