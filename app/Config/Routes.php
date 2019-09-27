@@ -93,6 +93,7 @@ $routes->get('blogs', 'Blogs::index');
 $routes->get('blogs/create', 'Blogs::create');
 $routes->get('blogs/edit/(:segment)', 'Blogs::edit/$1');
 $routes->get('blogs/update', 'Blogs::update');
+$routes->get('blogs/categories/(:segment)', 'Blogs::category_blogs/$1');
 
 
 //Categories

@@ -94,18 +94,29 @@ class Blogs extends BaseController {
                 $this->model->save([
                     'title'         => $this->request->getVar('title'),
                     'description'   => $this->request->getVar('description'),
-                    'category_id'   => $this->request->getVar('category_id'),
                     'tags'          => $tags,
                     'date_time'     => date('Y-m-d H:i:s')
                 ]);
                 
                 $id = $this->model->insertID();
-                $return_data = $this->_upload_doc($id,$_FILES);
+                if($id) {
+                    $categories = $this->request->getVar('category_id');
+                    $new_arr = array();
+                    foreach($categories as $category) {
+                        $new_arr[] = array(
+                            'category_id'   => $category,
+                            'blog_id'       => $id,
+                        );
+                    }
+                    $this->model->insert_blog_categories($new_arr);
+                }
+                $return_data    = $this->_upload_doc($id,$_FILES);
+                
                 if(!isset($return_data['error'])) {
                     $status = $this->model->update($id, array(
                         'image'     => $return_data['blog_img']['file_path'],
                         'document'  => $return_data['document']['file_path'],
-                        'blog_tags'     => $tags,
+                        'blog_tags' => $tags,
                     ));
                 }
                 return redirect()->to(base_url() . "blogs");
@@ -164,10 +175,16 @@ class Blogs extends BaseController {
         $details = $this->model->getBlogs(array(
             'id' => $blog_id,
         ));
+        
+        $blog_categories = $this->model->getBlogCategories(array(
+            'blog_id'   => $blog_id
+        ));
+        $blog_ids = array_column($blog_categories,'category_id');
 
         $data = array(
             'blog_data' => $details,
             'categories' => $this->categories->getCategories(),
+            'blog_ids'   => $blog_ids,
             'css' => array(
                 base_url('plugins/jQueryFiler/css/themes/jquery.filer-dragdropbox-theme.css'),
                 base_url('plugins/jQueryFiler/css/jquery.filer.css'),
@@ -195,9 +212,22 @@ class Blogs extends BaseController {
         $status = $this->model->update($id, [
             'title'         => $this->request->getVar('title'),
             'description'   => $this->request->getVar('description'),
-            'category_id'   => $this->request->getVar('category_id'),
             'tags'          => implode(',',$this->request->getVar('tags')),
         ]);
+        
+        $this->model->delete_blog_categories(array(
+            'blog_id'   => $id
+        ));
+        
+        $categories = $this->request->getVar('category_id');
+        $new_arr = array();
+        foreach($categories as $category) {
+            $new_arr[] = array(
+                'category_id'   => $category,
+                'blog_id'       => $id,
+            );
+        }
+        $this->model->insert_blog_categories($new_arr);
         
         $details = $this->model->getBlogs(array(
             'id' => $id,
@@ -228,12 +258,16 @@ class Blogs extends BaseController {
         $this->categories = new CategoriesModel();
         $blog_id = $this->request->uri->getSegment(3);
         $details = $this->model->getBlogs(array(
-            'id' => $blog_id,
+            'blogs.id' => $blog_id,
         ));
-
+        $blog_categories = $this->model->getBlogCategories(array(
+            'blog_id'   => $blog_id
+        ));
+        
         $data = array(
-            'blog_data' => $details,
+            'blog_data' => $details[0],
             'categories' => $this->categories->getCategories(),
+            'blog_categories' => $blog_categories,
             'menu' => array(
                 'current_page'  => 'blogs',
                 'current_menu'  => 'masters',
@@ -241,6 +275,30 @@ class Blogs extends BaseController {
         );
         echo view('templates/header', $data);
         echo view('blogs/view', $data);
+        echo view('templates/footer');
+    }
+    
+    public function delete_files() {
+        
+    }
+    
+    public function category_blogs() {
+        $this->categories = new CategoriesModel();
+        $category_id = $this->request->uri->getSegment(3);
+        $blogs = $this->model->getBlogs(array(
+            'blog_cate.category_id' => $category_id,
+        ));
+
+        $data = array(
+            'blogs' => $blogs,
+            'menu' => array(
+                'current_page'  => 'blogs',
+                'current_menu'  => 'masters',
+            ),
+        );
+        
+        echo view('templates/header', $data);
+        echo view('blogs/all_blogs', $data);
         echo view('templates/footer');
     }
 }

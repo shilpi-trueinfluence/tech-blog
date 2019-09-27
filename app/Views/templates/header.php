@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="<?php echo base_url('plugins/summernote/summernote-lite.css'); ?>">
+        <link rel="shortcut icon" href="http://localhost/tech_blog/public/img/favicon_32.png" />
         <?php
         if (isset($css) && !empty($css)) {
             foreach ($css as $single_css) {
@@ -55,7 +56,7 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">More <i class="fa fa-angle-down"></i></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="<?php echo base_url('home'); ?>">Infra</a></li>
+                                        <li><a href="<?php echo base_url('blogs/categories/1'); ?>">Infra</a></li>
                                         <li><a href="<?php echo base_url('home'); ?>">Digital Transformation</a></li>
                                         <li><a href="<?php echo base_url('home'); ?>">Resource Center</a></li>
                                         <li><a href="<?php echo base_url('home'); ?>">Block Chain</a></li>

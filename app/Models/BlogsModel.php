@@ -10,18 +10,38 @@ class BlogsModel extends Model {
     public function getBlogs($where = array()) {
         if (empty($where)) {
             return $this->asArray()
-                            ->select('blogs.id,blogs.title,blogs.category_id,c.name as categories')
-                            ->join(
-                                'categories c','c.id = blogs.category_id'
-                            )
-                            ->where([
-                                'blogs.status' => 0,
-                            ])->findAll();
+                    ->select('blogs.id,blogs.title,blog_cate.category_id,blogs.description,group_concat(c.name separator ", ") as categories')
+                    ->join(
+                        'blog_categories blog_cate','blog_cate.blog_id = blogs.id'
+                    )
+                    ->join(
+                        'categories c','c.id = blog_cate.category_id'
+                    )
+                    ->where([
+                        'blogs.status' => 0,
+                    ])
+                    ->groupBy('blogs.id')->findAll();
         }
 
         return $this->asArray()
+                        ->select('blogs.id,blogs.title,blogs.image,blogs.document,blogs.description,blog_cate.category_id,group_concat(c.name separator ", ") as categories')
+                        ->join(
+                            'blog_categories blog_cate','blog_cate.blog_id = blogs.id'
+                        )
+                        ->join(
+                            'categories c','c.id = blog_cate.category_id'
+                        )
                         ->where($where)
-                        ->first();
+                        ->findAll();
+    }
+    
+    public function getBlogCategories($where = array()) {
+        $query = $this->db->table('blog_categories blog_cate')
+                    ->select('blog_cate.category_id,blog_cate.blog_id,c.name')
+                    ->join('categories c','c.id = blog_cate.category_id')
+                    ->getWhere($where);
+        
+        return $query->getResult('array');
     }
 
     public function deleteBlog($id) {
@@ -32,9 +52,14 @@ class BlogsModel extends Model {
     
     public function get_blog($data) {
         $query = $this->db->table($this->table)->getWhere($data);
-//        echo '<pre>';
-//        print_r($this->db->getLastQuery());
-//        echo '</pre>';
         return $query->getResult();
+    }
+    
+    public function delete_blog_categories($where) {
+        $this->db->table('blog_categories')->delete($where);
+    }
+    
+    public function insert_blog_categories($data) {
+        $this->db->table('blog_categories')->insertBatch($data);
     }
 }

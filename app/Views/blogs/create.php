@@ -15,15 +15,15 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <form role="form" class="add-form" action="<?php echo ($blog_data['id']) ? base_url('blogs/update') : base_url('blogs/create'); ?>" method="post" enctype="multipart/form-data">
+                <form role="form" class="add-form" action="<?php echo isset($blog_data['id']) ? base_url('blogs/update') : base_url('blogs/create'); ?>" method="post" enctype="multipart/form-data">
                     <?php
-                    if($blog_data['id']) {
+                    if(isset($blog_data['id']) && $blog_data['id']) {
                     ?>
                     <input type="hidden" name="id" value="<?php echo $blog_data['id']; ?>" />
                     <?php 
                     }
                     ?>
-                    <h2><i class="fa fa-page"></i> Add New Blog</h2>
+                    <h2><i class="fa fa-page"></i> <?php echo isset($blog_data['id']) ? 'Update New Blog' : 'Add New Blog'; ?></h2>
                     <hr class="colorgraph">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
@@ -35,11 +35,11 @@
                         <div class="col-xs-12 col-md-6">
                             <div class="form-group">
                                 <label>Category</label>
-                                <select name="category_id" required="true" class="form-control input-lg" id="blog-categories" multiple="true">
+                                <select name="category_id[]" required="true" class="form-control input-lg" id="blog-categories" multiple="true">
                                     <?php
                                     foreach ($categories as $id => $category) {
                                         ?>
-                                        <option value="<?php echo $category['id']; ?>" <?php echo ($blog_data['category_id'] == $category['id']) ? 'selected' : ''; ?>><?php echo $category['name']; ?></option>
+                                        <option value="<?php echo $category['id']; ?>" <?php echo (isset($blog_ids) && (in_array($category['id'],$blog_ids))) ? 'selected' : ''; ?>><?php echo $category['name']; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -60,8 +60,9 @@
                                 <label>Blog Image</label>
                                 <div class="col-xs-12" style="padding: 0">
                                     <input id="blog_image" type="file" name="blog_img">
-                                    <?php
-                                    $file1 = new \CodeIgniter\Files\File('../public/'.$blog_data['image']);
+                                    <?php 
+                                    if(isset($blog_data['image'])) { 
+                                        $file1 = new \CodeIgniter\Files\File('../public/'.$blog_data['image']);
                                     ?>
                                     <div class="jFiler-items jFiler-row">
                                         <ul class="jFiler-items-list jFiler-items-default">
@@ -80,7 +81,7 @@
                                                             </div>
                                                             <div class="jFiler-item-assets">
                                                                 <ul class="list-inline">
-                                                                    <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>
+                                                                    <li><a class="icon-jfi-trash jFiler-item-trash-action remove-file"></a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -89,6 +90,7 @@
                                             </li>
                                         </ul>
                                     </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +99,8 @@
                                 <label>White Paper</label>
                                 <input type="file" name="document" id="document" class="form-control input-lg" />
                                 <?php
-                                $file2 = new \CodeIgniter\Files\File('../public/'.$blog_data['document']);
+                                if(isset($blog_data['document'])) { 
+                                    $file2 = new \CodeIgniter\Files\File('../public/'.$blog_data['document']);
                                 ?>
                                 <div class="jFiler-items jFiler-row">
                                     <ul class="jFiler-items-list jFiler-items-default">
@@ -116,7 +119,7 @@
                                                         </div>
                                                         <div class="jFiler-item-assets">
                                                             <ul class="list-inline">
-                                                                <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>
+                                                                <li><a class="icon-jfi-trash jFiler-item-trash-action remove-file"></a></li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -125,6 +128,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
