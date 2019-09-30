@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\UsersModel;
 use CodeIgniter\Controller;
+use App\Models\CategoriesModel;
 
 class Users extends BaseController {
 
@@ -181,7 +182,9 @@ class Users extends BaseController {
 
             if (count($uresult) > 0) {
                 // set session
-                $sess_data = array('logged_in' => TRUE, 'uname' => $uresult[0]->first_name.' '.$uresult[0]->last_name, 'uemail' => $uresult[0]->email_id, 'uid' => $uresult[0]->id);
+                $this->categories = new CategoriesModel();
+                
+                $sess_data = array('logged_in' => TRUE, 'uname' => $uresult[0]->first_name.' '.$uresult[0]->last_name, 'uemail' => $uresult[0]->email_id, 'uid' => $uresult[0]->id,'categories' => $this->categories->getCategories());
                 $this->session->set($sess_data);
                 return redirect()->to(base_url() . "home");
             } else {

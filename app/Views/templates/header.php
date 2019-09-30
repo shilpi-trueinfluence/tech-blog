@@ -49,23 +49,17 @@
                             <a class="navbar-brand" href="<?php echo base_url('home'); ?>"><img src="<?php echo base_url('img/digiinfluence-01-01.png'); ?>" alt="" width="110" height="110" /></a>
                         </div>
                         <div class="navbar-collapse collapse">
+                            <?php $categories = (isset($_SESSION['categories'])) ? $_SESSION['categories'] : array(); ?>
                             <ul class="nav navbar-nav">
                                 <li class="<?php echo (isset($menu) && $menu['current_page'] != 'home') ? '' : 'active'; ?>"><a href="<?php echo base_url('home'); ?>">Home</a></li>
-                                <li><a href="<?php echo base_url('home'); ?>">Trends</a></li>
-                                <li><a href="<?php echo base_url('home'); ?>">Events</a></li>
+<!--                                <li><a href="<?php echo base_url('home'); ?>">Trends</a></li>
+                                <li><a href="<?php echo base_url('home'); ?>">Events</a></li>-->
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">More <i class="fa fa-angle-down"></i></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="<?php echo base_url('blogs/categories/1'); ?>">Infra</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">Digital Transformation</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">Resource Center</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">Block Chain</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">FinTech</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">Cloud</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">AI</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">IoT</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">Big Data</a></li>
-                                        <li><a href="<?php echo base_url('home'); ?>">Security</a></li>
+                                        <?php foreach($categories as $category) { ?>
+                                        <li><a href="<?php echo base_url('blogs/categories/'.$category['id']); ?>"><?php echo $category['name']; ?></a></li>
+                                        <?php } ?>
                                     </ul>
                                 </li>
                                 <?php if (isset($_SESSION['logged_in'])) { ?>
