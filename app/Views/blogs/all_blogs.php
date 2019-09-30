@@ -2,7 +2,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <?php foreach($blogs as $blog) { ?>
+                <?php
+                if(isset($blogs) && !empty($blogs)) {
+                    foreach($blogs as $blog) {
+                        if(!empty($blog['id'])) {
+                    ?>
                     <article>
                         <div class="post-image">
                             <div class="post-heading">
@@ -25,7 +29,12 @@
                             <a href="<?php echo base_url('blogs/view/'.$blog['id']); ?>" class="readmore pull-right">Continue reading <i class="fa fa-angle-right"></i></a>
                         </div>
                     </article>
-                <?php } ?>
+                <?php 
+                        } else {
+                            ?><p>No Blogs found...</p><?php 
+                        }
+                    }
+                } ?>
                 
                 <div class="clear"></div>
             </div>

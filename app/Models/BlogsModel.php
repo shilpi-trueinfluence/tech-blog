@@ -7,7 +7,7 @@ class BlogsModel extends Model {
     protected $table = 'blogs';
     protected $allowedFields = ['id', 'title', 'description', 'category_id', 'image', 'document','tags', 'status'];
 
-    public function getBlogs($where = array()) {
+    public function getBlogs($where = array(),$args = array()) {
         if (empty($where)) {
             return $this->asArray()
                     ->select('blogs.id,blogs.title,blog_cate.category_id,blogs.description,group_concat(c.name separator ", ") as categories')
@@ -22,8 +22,8 @@ class BlogsModel extends Model {
                     ])
                     ->groupBy('blogs.id')->findAll();
         }
-
-        return $this->asArray()
+        if($args['multiple']) {
+            return $this->asArray()
                         ->select('blogs.id,blogs.title,blogs.image,blogs.document,blogs.description,blog_cate.category_id,group_concat(c.name separator ", ") as categories')
                         ->join(
                             'blog_categories blog_cate','blog_cate.blog_id = blogs.id'
@@ -33,6 +33,18 @@ class BlogsModel extends Model {
                         )
                         ->where($where)
                         ->findAll();
+        } else {
+            return $this->asArray()
+                        ->select('blogs.id,blogs.title,blogs.image,blogs.document,blogs.description,blog_cate.category_id,group_concat(c.name separator ", ") as categories')
+                        ->join(
+                            'blog_categories blog_cate','blog_cate.blog_id = blogs.id'
+                        )
+                        ->join(
+                            'categories c','c.id = blog_cate.category_id'
+                        )
+                        ->where($where)
+                        ->first();
+        }
     }
     
     public function getBlogCategories($where = array()) {

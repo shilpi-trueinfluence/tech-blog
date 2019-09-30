@@ -173,7 +173,7 @@ class Blogs extends BaseController {
         $this->categories = new CategoriesModel();
         $blog_id = $this->request->uri->getSegment(3);
         $details = $this->model->getBlogs(array(
-            'id' => $blog_id,
+            'blogs.id' => $blog_id,
         ));
         
         $blog_categories = $this->model->getBlogCategories(array(
@@ -287,6 +287,8 @@ class Blogs extends BaseController {
         $category_id = $this->request->uri->getSegment(3);
         $blogs = $this->model->getBlogs(array(
             'blog_cate.category_id' => $category_id,
+        ), array(
+            'multiple'  => TRUE
         ));
 
         $data = array(
