@@ -22,7 +22,7 @@ class BlogsModel extends Model {
                     ])
                     ->groupBy('blogs.id')->findAll();
         }
-        if($args['multiple']) {
+        if(isset($args['multiple'])) {
             return $this->asArray()
                         ->select('blogs.id,blogs.title,blogs.image,blogs.document,blogs.description,blog_cate.category_id,group_concat(c.name separator ", ") as categories')
                         ->join(

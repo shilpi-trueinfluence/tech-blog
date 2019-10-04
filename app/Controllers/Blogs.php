@@ -90,7 +90,7 @@ class Blogs extends BaseController {
                 $data['errors'] = $errors;
                 $data['blogs'] = $form_data;
             } else {
-                $tags = implode(',',$this->request->getVar('tags'));
+                $tags = (!empty($this->request->getVar('tags'))) ? implode(',',$this->request->getVar('tags')) : '';
                 $this->model->save([
                     'title'         => $this->request->getVar('title'),
                     'description'   => $this->request->getVar('description'),
@@ -212,7 +212,7 @@ class Blogs extends BaseController {
         $status = $this->model->update($id, [
             'title'         => $this->request->getVar('title'),
             'description'   => $this->request->getVar('description'),
-            'tags'          => implode(',',$this->request->getVar('tags')),
+            'tags'          => (!empty($this->request->getVar('tags'))) ? implode(',',$this->request->getVar('tags')) : '',
         ]);
         
         $this->model->delete_blog_categories(array(
@@ -230,7 +230,7 @@ class Blogs extends BaseController {
         $this->model->insert_blog_categories($new_arr);
         
         $details = $this->model->getBlogs(array(
-            'id' => $id,
+            'blogs.id' => $id,
         ));
 
         $data = array(
@@ -265,7 +265,7 @@ class Blogs extends BaseController {
         ));
         
         $data = array(
-            'blog_data' => $details[0],
+            'blog_data' => $details,
             'categories' => $this->categories->getCategories(),
             'blog_categories' => $blog_categories,
             'menu' => array(

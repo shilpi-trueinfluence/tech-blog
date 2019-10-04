@@ -20,6 +20,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="<?php echo base_url('plugins/summernote/summernote-lite.css'); ?>">
         <link rel="shortcut icon" href="http://localhost/tech_blog/public/img/favicon_32.png" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <?php
         if (isset($css) && !empty($css)) {
             foreach ($css as $single_css) {

@@ -48,7 +48,16 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
-                <div class="col-sm-6 col-md-6">
+                <div class="col-sm-6">
+                    <div id="chart_div" style="position: relative;width: 100%; height: 500px"></div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="chart_div2" style="position: relative;width: 100%; height: 500px"></div>
+                </div>
+            </div>
+            
+<!--            <div class="row" style="margin-top: 50px">
+                <div class="col-sm-6">
                     <h4>Testimonials</h4>
                     <div class="testimonialslide clearfix flexslider">
                         <ul class="slides">
@@ -96,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
@@ -111,4 +120,76 @@
     </div>
 </div>
 <!-- end divider -->
-<?php require 'templates/footer.php'; ?>
+<script type="text/javascript">
+google.charts.load('current', {'packages':['corechart','bar']});
+google.charts.setOnLoadCallback(drawVisualization);
+function drawVisualization() {
+    // Some raw data (not necessarily accurate)
+    var data = google.visualization.arrayToDataTable([
+        ['Month', 'Leads','Average'],
+        ['Jan\'19',  10,10],
+        ['Feb\'19',  20,20],
+        ['Mar\'19',  30,30],
+        ['Apr\'19',  40,40],
+        ['May\'19',  25,25],
+        ['Jun\'19',  60,60],
+        ['Jul\'19',  79,79],
+        ['Aug\'19',  55,55],
+        ['Sep\'19',  66,66],
+        ['Oct\'19',  82,82],
+        ['Nov\'19',  99,99],
+        ['Dec\'19',  115,115]
+    ]);
+
+    var options = {
+        title : 'Monthly Leads',
+        vAxis: {title: 'Numbers'},
+        hAxis: {title: 'Month'},
+        seriesType: 'bars',
+        chartArea: {'width': '100%', 'height': '80%'},
+        series: {1: {type: 'line'}}
+    };
+
+    var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+}
+
+function drawColumns() {
+    var data = google.visualization.arrayToDataTable([
+        ['Months','Un-Subscriptions', 'Subscriptions' ],
+        ['Jan\'19',  10,5],
+        ['Feb\'19',  20,6],
+        ['Mar\'19',  30,0],
+        ['Apr\'19',  40,10],
+        ['May\'19',  25,20],
+        ['Jun\'19',  60,0],
+        ['Jul\'19',  79,3],
+        ['Aug\'19',  55,5],
+        ['Sep\'19',  66,8],
+        ['Oct\'19',  82,10],
+        ['Nov\'19',  99,0],
+        ['Dec\'19',  115,4]
+    ]);
+
+    var options = {
+        title : 'Subscriptions',
+//        chart: {
+//            title: 'Subscriptions',
+//            subtitle: 'Number of subscribers and unsubscribers',
+//        },
+        chartArea: {
+            'width': '100%',
+            'height': '80%'
+        },
+        legend: { position: 'top' },
+        colors: ['#9575cd', '#33ac71'],
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('chart_div2'));
+
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+}
+
+google.charts.setOnLoadCallback(drawColumns);
+</script>
+<?php require 'templates/footer.php';
